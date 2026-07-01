@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Bills</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 25px;
+            border: 1px solid #cccccc;
+            border-radius: 8px;
+        }
+        .bill-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .opt-btn {
+            background-color: #e0e0e0;
+            color: #333333;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            border: 1px solid #bbbbbb;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .opt-btn.active {
+            background-color: #e65100;
+            color: white;
+            border-color: #e65100;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #999999;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .pay-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .back-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: transparent;
+            color: #666666;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .back-btn:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 style="text-align: center; margin-top: 0;">Utility Bill Payments</h2>
+        <p style="text-align: center; color: #666666; font-size: 14px;">Select a service below to clear your outstanding payments.</p>
+
+        <!-- Category Select Tabs -->
+        <div class="bill-options">
+            <button id="tab-mobile" class="opt-btn active" onclick="switchCategory('Mobile')">📱 Mobile</button>
+            <button id="tab-electric" class="opt-btn" onclick="switchCategory('Electricity')">💡 Electric</button>
+            <button id="tab-gas" class="opt-btn" onclick="switchCategory('Gas')">🔥 Gas</button>
+        </div>
+
+        <!-- Form Fields Box -->
+        <div id="billForm">
+            <div class="input-group">
+                <label id="numberLabel">Mobile Number:</label>
+                <input type="text" id="accountNumber" placeholder="Enter 10-digit phone number">
+            </div>
+
+            <div class="input-group">
+                <label>Billing Amount ($):</label>
+                <input type="number" id="billAmount" placeholder="0.00" min="1">
+            </div>
+
+            <button onclick="processBillPayment()" class="pay-btn">Authorize Bill Payment</button>
+        </div>
+
+        <button onclick="window.location.href='index.html'" class="back-btn">Return to Dashboard</button>
+    </div>
+
+    <script>
+        // Track which item type is chosen by the user
+        let currentType = 'Mobile';
+
+        // Handles changing input labels depending on user choice
+        function switchCategory(type) {
+            currentType = type;
+            
+            // Remove highlighting active color from all tabs
+            document.getElementById('tab-mobile').classList.remove('active');
+            document.getElementById('tab-electric').classList.remove('active');
+            document.getElementById('tab-gas').classList.remove('active');
+
+            // Apply highlighting active color to chosen tab
+            if(type === 'Mobile') {
+                document.getElementById('tab-mobile').classList.add('active');
+                document.getElementById('numberLabel').textContent = "Mobile Number:";
+                document.getElementById('accountNumber').placeholder = "Enter 10-digit phone number";
+            } else if(type === 'Electricity') {
+                document.getElementById('tab-electric').classList.add('active');
+                document.getElementById('numberLabel').textContent = "Electricity Consumer ID:";
+                document.getElementById('accountNumber').placeholder = "Enter consumer account number";
+            } else if(type === 'Gas') {
+                document.getElementById('tab-gas').classList.add('active');
+                document.getElementById('numberLabel').textContent = "Gas Consumer Number:";
+                document.getElementById('accountNumber').placeholder = "Enter customer connection reference";
+            }
+        }
+
+        // Logic sequence to run when payment execution is clicked
+        function processBillPayment() {
+            const accountInput = document.getElementById('accountNumber').value.trim();
+            const amountInput = document.getElementById('billAmount');
+            const totalToPay = parseFloat(amountInput.value);
+
+            // 1. Text Field Inputs Validation
+            if (accountInput === "") {
+                alert("Error: Please provide a correct account number or identifier reference.");
+                return;
+            }
+
+            if (isNaN(totalToPay) || totalToPay <= 0) {
+                alert("Error: Please enter a proper positive number for the amount!");
+                return;
+            }
+
+            // 2. Fetch balance parameter limits from storage profiles
+            let balance = parseFloat(localStorage.getItem('simple_balance')) || 1500.00;
+
+            if (totalToPay > balance) {
+                alert("Payment Declined: Your core bank balance does not have enough funds!");
+                return;
+            }
+
+            // 3. Prompt security verification challenge pin
+            const securityCheck = prompt("Enter your 4-digit security PIN to confirm bill (Hint: 9999):");
+            if (securityCheck !== "9999") {
+                alert("Verification Failed: Wrong secure pin number entered.");
+                return;
+            }
+
+            // 4. Save calculations back to system state profiles
+            balance = balance - totalToPay;
+            localStorage.setItem('simple_balance', balance);
+
+            // 5. Append transaction note strings inside storage histories
+            let auditLogs = JSON.parse(localStorage.getItem('simple_history')) || [];
+            auditLogs.unshift(currentType + " Bill Paid: $" + totalToPay.toFixed(2) + " for reference [" + accountInput + "]");
+            localStorage.setItem('simple_history', JSON.stringify(auditLogs));
+
+            // 6. Alert success feedback notifications and drop out to dashboard screen
+            alert("Success! Your " + currentType + " bill has been processed securely.");
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
