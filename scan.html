@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan QR Code</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 8px;
+        }
+        /* This simulates a live phone camera box */
+        .camera-box {
+            width: 250px;
+            height: 250px;
+            background-color: #222222;
+            margin: 20px auto;
+            border: 4px solid #666666;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* The green square overlay in scanning apps */
+        .scan-target {
+            width: 180px;
+            height: 180px;
+            border: 3px dashed #2e7d32;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.4; }
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background-color: #c62828;
+            color: white;
+            margin-top: 15px;
+        }
+        .demo-btn {
+            background-color: #2e7d32;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Simulated QR Scanner</h2>
+        <p>Hold your phone camera up to a bank QR code.</p>
+
+        <!-- Simulated Camera Viewfinder -->
+        <div class="camera-box">
+            <div class="scan-target"></div>
+        </div>
+
+        <p class="small-text" style="color: #666666;">Click below to test a successful scan:</p>
+        
+        <!-- Interactive simulation triggers -->
+        <button onclick="simulateScan('shop@okaxis', 25.00)" class="demo-btn">
+            Simulate Scanning Shop QR ($25)
+        </button>
+        <button onclick="simulateScan('friend@okbank', 10.00)" class="demo-btn" style="background-color: #6a1b9a;">
+            Simulate Scanning Friend QR ($10)
+        </button>
+        
+        <br>
+        <button onclick="window.location.href='index.html'">Cancel and Go Back</button>
+    </div>
+
+    <script>
+        // This function handles what happens when a QR code is detected
+        function simulateScan(scannedUpiId, amountToPay) {
+            alert("QR Code Found!\nPaying: $" + amountToPay + "\nTo UPI: " + scannedUpiId);
+            
+            // 1. Get the current bank balance from local storage
+            let currentBalance = parseFloat(localStorage.getItem('simple_balance')) || 1500.00;
+            
+            // 2. Check if the user has enough money
+            if (amountToPay > currentBalance) {
+                alert("Scan Failed: You do not have enough money!");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // 3. Prompt for security PIN code
+            const pin = prompt("Enter your 4-digit UPI PIN to clear payment (Hint: 9999):");
+            if (pin !== "9999") {
+                alert("Wrong PIN! Payment cancelled.");
+                return;
+            }
+
+            // 4. Subtract the money and update balance
+            currentBalance = currentBalance - amountToPay;
+            localStorage.setItem('simple_balance', currentBalance);
+
+            // 5. Save the new action into history array list
+            let logHistory = JSON.parse(localStorage.getItem('simple_history')) || [];
+            logHistory.unshift("QR Paid $" + amountToPay.toFixed(2) + " to " + scannedUpiId);
+            localStorage.setItem('simple_history', JSON.stringify(logHistory));
+
+            // 6. Alert success and send them right back to index.html dashboard
+            alert("Payment successful!");
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
