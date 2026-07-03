@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Bills</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="box">
+
+        <h2>💡 Utility Bills</h2>
+
+        <div class="card" onclick="selectBill('Electricity')">
+            ⚡ Electricity Bill
+        </div>
+
+        <div class="card" onclick="selectBill('Water')">
+            🚰 Water Bill
+        </div>
+
+        <div class="card" onclick="selectBill('Mobile')">
+            📱 Mobile Recharge
+        </div>
+
+        <div class="card" onclick="selectBill('Gas')">
+            🔥 Gas Bill
+        </div>
+
+        <br>
+
+        <input type="number" id="billAmount" placeholder="Enter Amount">
+
+        <button onclick="payBill()">Pay Now</button>
+
+        <br><br>
+
+        <button onclick="window.location.href='index.html'">⬅ Back</button>
+
+        <p id="selectedBill"></p>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+body {
+    font-family: Arial;
+    background: #0f172a;
+    margin: 0;
+    color: white;
+}
+
+/* FULL SCREEN CENTER FIX */
+.login-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* LOGIN BOX */
+.login-box {
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 15px;
+    width: 300px;
+    text-align: center;
+}
+
+/* INPUT */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 10px;
+    background: #38bdf8;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #0ea5e9;
+}
+
+#msg {
+    color: red;
+    margin-top: 10px;
+}
+/* DASHBOARD GRID */
+.dashboard {
+    padding: 20px;
+}
+
+/* SMALL CARDS */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.card {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.card:hover {
+    background: #334155;
+    transform: scale(1.05);
+}
+
+.hidden {
+    display: none;
+}

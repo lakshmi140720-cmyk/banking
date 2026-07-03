@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="box">
+
+        <h2>🏦 Create New Account</h2>
+
+        <input
+            type="text"
+            id="newUsername"
+            placeholder="Enter Username">
+
+        <br><br>
+
+        <input
+            type="password"
+            id="newPassword"
+            placeholder="Enter Password">
+
+        <br><br>
+
+        <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm Password">
+
+        <br><br>
+
+        <button onclick="register()">
+            Create Account
+        </button>
+
+        <br><br>
+
+        <button onclick="window.location.href='login.html'">
+            Back to Login
+        </button>
+
+        <p id="registerMsg"></p>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <h2>🏦 Welcome</h2>
+    <button onclick="logout()">🚪 Logout</button>
+    <h3>Balance: $<span id="balance">1500</span></h3>
+
+    <div class="grid">
+
+        <div class="card" onclick="depositPrompt()">
+            💰 Check / Add Balance
+        </div>
+
+        <div class="card" onclick="sendPrompt()">
+            💸 Send Money
+            <select id="sendContact" onchange="fillUpi()">
+    <option value="">Select Contact</option>
+    <option value="Ravi@upi">Ravi - 9876543210</option>
+    <option value="Kumar@upi">Kumar - 9123456780</option>
+    <option value="Anu@upi">Anu - 9988776655</option>
+</select>
+<div class="card">
+
+    <h3>👤 Transfer User</h3>
+
+    <input type="text"
+           id="receiver"
+           placeholder="Receiver Username">
+
+    <br><br>
+
+    <input type="number"
+           id="transferAmount"
+           placeholder="Amount">
+
+    <br><br>
+
+    <button onclick="transferMoney()">
+        Transfer
+    </button>
+
+</div>
+        </div>
+
+        <div class="card" onclick="goQR()">
+            📷 QR Scan
+        </div>
+
+        <div class="card" onclick="goBills()">
+            💡 Bills
+        </div>
+
+    </div>
+
+</div>
+<div class="box">
+    <h3>📜 Transaction History</h3>
+    <ul id="history"></ul>
+</div>
+<script>
+window.addEventListener("focus", function () {
+    update();
+});
+</script>
+<script src="script.js"></script>
+</body>
+</html>
